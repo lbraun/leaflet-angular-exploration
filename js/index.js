@@ -17,13 +17,17 @@ app.controller("IndexController", ["$scope", function($scope) {
 
   $scope.markers = new Array();
 
-  $scope.$on("leafletDirectiveMap.click", function (event,args) {
-    var latlng = args.leafletEvent.latlng;
+  $scope.$on("leafletDirectiveMap.mousedown", function (event,args) {
+    var mouseButton = args.leafletEvent.originalEvent.button;
 
-    $scope.markers.push({
-      lat: latlng.lat,
-      lng: latlng.lng,
-      message: "Big Material"
-    });
+    if (mouseButton == 2) { // Right button
+      var latlng = args.leafletEvent.latlng;
+
+      $scope.markers.push({
+        lat: latlng.lat,
+        lng: latlng.lng,
+        message: "Hello"
+      });
+    }
   });
 }]);
