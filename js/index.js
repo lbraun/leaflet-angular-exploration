@@ -20,10 +20,10 @@ app.controller("IndexController", ["$scope", function($scope) {
   $scope.$on("leafletDirectiveMap.click", function (event,args) {
     var latlng = args.leafletEvent.latlng;
 
-    $scope.markers = [{
+    $scope.markers.push({
       lat: latlng.lat,
       lng: latlng.lng,
       message: "Big Material"
-    }]
+    });
   });
 }]);
