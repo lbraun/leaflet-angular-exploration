@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
-<head>
-  <meta charset="UTF-8">
-  <link href="../node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-  <link href="../node_modules/leaflet/dist/leaflet.css" rel="stylesheet">
-  <script src="../node_modules/jquery/dist/jquery.js"></script>
-  <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
-  <script src="../node_modules/angular/angular.js"></script>
-  <script src="../node_modules/leaflet/dist/leaflet.js"></script>
-  <script src="../node_modules/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
-  <script src="../js/index.js"></script>
-  <title>My first AngularJS and Leaflet map</title>
-</head>
-<body ng-controller="IndexController">
-  <div class="container">
-    <h1>My first Angular and Leaftlet map</h1>
-    <leaflet tiles="tiles" height="480px" width="100%"></leaflet>
-  </div>
-</body>
+  <head>
+    <meta charset="UTF-8">
+
+    <!-- CSS -->
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../node_modules/leaflet/dist/leaflet.css" rel="stylesheet">
+
+    <!-- Scripts -->
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../node_modules/angular/angular.js"></script>
+    <script src="../node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="../node_modules/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
+    <script src="../js/index.js"></script>
+
+    <title>AngularJS and Leaflet</title>
+  </head>
+  <body ng-controller="IndexController">
+    <div class="container">
+      <h1>AngularJS and Leaflet Exploration</h1>
+      <leaflet tiles="tiles" lf-center="center" markers="markers" height="480px" width="100%"></leaflet>
+    </div>
+  </body>
 </html>
