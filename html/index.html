@@ -43,7 +43,7 @@
                 <tr ng-repeat="marker in markers">
                   <td>{{marker.message}}</td>
                   <td>{{marker.dueDate | date: "dd/MM/yyyy (hh:mm)"}}</td>
-                  <td><button class="btn btn-info" ng-click="showInfo($index)" data-toggle="modal" data-target="#modal">Info</button> </td>
+                  <td><button class="btn btn-info" ng-click="info($index)" data-toggle="modal" data-target="#modal">Info</button> </td>
                   <td><button class="btn btn-success" ng-click="show($index)">Show</button> </td>
                   <td><button class="btn btn-danger" ng-click="remove($index)">Remove</button> </td>
                 </tr>
@@ -62,7 +62,8 @@
             </div>
             <div class="modal-body">
               <p><b>Title:</b> <input type="text" ng-model="currentMarker.message"></p>
-              <p><strong>Due date:</strong> <input type="datetime-local" ng-model="currentMarker.dueDate"></p>
+              <p><b>Due date:</b> <input type="datetime-local" ng-model="currentMarker.dueDate"></p>
+              <p><b>Address:</b> {{currentMarker.address}}</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
