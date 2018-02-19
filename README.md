@@ -1,4 +1,4 @@
-# leaflet-angular-exploration
+# Geo Todo
 An exploration of the possibilities when combining leaflet.js with angular.js
 
 ## Contributers
