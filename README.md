@@ -3,6 +3,7 @@ An exploration of the possibilities when combining leaflet.js with angular.js
 
 ## Contributers
 Lucas Braun
+Brhane Bahrishum
 
 ## Getting started
 Simply open the file html/index.html to see the app in action!
