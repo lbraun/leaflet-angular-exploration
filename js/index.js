@@ -72,6 +72,9 @@ app.controller("IndexController", ["$scope", "$http", function($scope, $http) {
     if(response.data.length>0){
       console.log(response.data);
       $scope.markers = response.data;
+      for(var i=0;i<$scope.markers.length;i++){
+        $scope.markers[i].message = "<b>Title: </b>"+$scope.markers[i].title + "<br/><b>Due Date: </b>"+$scope.markers[i].dueDate + "<br/> <b>Address: </b>" + $scope.markers[i].address;
+      }
     }
     else{
       $scope.currentMarker = [];
@@ -97,7 +100,7 @@ app.controller("IndexController", ["$scope", "$http", function($scope, $http) {
     $("#modal").on('click','#btnClose',function(){
       //console.log($scope.markers[index]._id);
       //console.log(marker[]);
-      $http.put(serverUrl+$scope.markers[index]._id,m).then(taskPostSuccess,errorMessage);
+      $http.put(serverUrl+$scope.markers[index]._id,m).then(postSuccess,errorMessage);
     })
   }
 
