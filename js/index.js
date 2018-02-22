@@ -16,7 +16,7 @@ app.controller("IndexController", ["$scope", "$http", function($scope, $http) {
   })
 
   $scope.markers = new Array();
-
+  $scope.counter = 0;
   $scope.$on("leafletDirectiveMap.mousedown", function (event,args) {
     var mouseButton = args.leafletEvent.originalEvent.button;
 
@@ -41,7 +41,7 @@ app.controller("IndexController", ["$scope", "$http", function($scope, $http) {
       dueDate: new Date(),
       address: response.data.display_name
     };
-
+    $scope.counter++;
     $scope.markers.push(marker);
     $scope.currentMarker = marker;
     $("#modal").modal('show');
@@ -66,6 +66,7 @@ app.controller("IndexController", ["$scope", "$http", function($scope, $http) {
   $scope.remove = function(index) {
     if (index !== -1) {
       $scope.markers.splice(index, 1);
+        $scope.counter--;
     }
   }
 }]);
