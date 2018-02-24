@@ -20,7 +20,7 @@ app.post("/todo", function(req, res, next) {
   }, function(err, task) {
     if (err) {
       res.status(500);
-      res.send(err);
+      next(err);
     } else {
       res.status(201);
       res.send(task);
@@ -28,7 +28,7 @@ app.post("/todo", function(req, res, next) {
   });
 })
 app.delete("/todo/:id", function(req, res, next) {
-  var id = '' + req.params.id;
+  var id = req.params.id;
   task.remove({
     _id: id
   }, function(err, result) {
@@ -45,9 +45,9 @@ app.delete("/todo/:id", function(req, res, next) {
   });
 })
 app.put("/todo/:id", function(req, res, next) {
-  var id = '' + req.params.id;
+  var id = req.params.id;
   task.update({
-    _id: '' + id
+    _id: id
   }, {
     title: req.body.title,
     dueDate: req.body.dueDate,
@@ -67,7 +67,6 @@ app.put("/todo/:id", function(req, res, next) {
     }
   });
 })
-
 app.get("/todo", function(req, res) {
   var stream = task.find().stream();
   if (stream) {
@@ -77,7 +76,7 @@ app.get("/todo", function(req, res) {
       results.push(doc);
     }).on("error", function(err) {
       res.status(500);
-      res.send(err);
+      next(err);
     }).on('close', function() {
       res.status(200);
       res.send(results);

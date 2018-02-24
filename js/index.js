@@ -24,14 +24,12 @@ app.controller("IndexController", ["$scope", "$http", function($scope, $http) {
       reverseGeocoding(latlng);
     }
   });
-
   function reverseGeocoding(latlng) {
     var urlString = "http://nominatim.openstreetmap.org/reverse?format=json&lat=" +
       latlng.lat + "&lon=" +
       latlng.lng + "&zoom=18&addressdetails=1";
     $http.get(urlString).then(addMarker, errorMessage);
   }
-
   function addMarker(response) {
     var marker = {
       lat: parseFloat(response.data.lat),
@@ -56,24 +54,20 @@ app.controller("IndexController", ["$scope", "$http", function($scope, $http) {
         $http.get(serverUrl).then(loadTodos, errorMessage);
       }
     }, errorMessage);
-
   }
-
   function loadTodos(response) {
     if (response.data.length > 0) {
       $scope.markers = response.data;
-      for (var i = 0; i < $scope.markers.length; i++) {
-        $scope.markers[i].message = "<b>Title: </b>" + $scope.markers[i].title + "<br/><b>Due Date: </b><b>" + $scope.markers[i].dueDate + "</b>";
-      }
+      $($scope.markers).each(function(index, marker) {
+        $scope.markers[index].message = "<b>Title: </b>" + marker.title + "<br/><b>Due Date: </b><b>" + marker.dueDate + "</b>";
+      });
     } else {
       $scope.currentMarker = [];
     }
   }
-
   function postSuccess(response) {
     $http.get(serverUrl).then(loadTodos, errorMessage);
   }
-
   function errorMessage(error) {
     console.log(error);
   }
