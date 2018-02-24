@@ -66,7 +66,7 @@ app.controller("IndexController", ["$scope", "$http", function($scope, $http) {
   $scope.remove = function(index) {
     if (index !== -1) {
       $scope.markers.splice(index, 1);
-        $scope.counter--;
+      $scope.counter--;
     }
   }
 }]);
