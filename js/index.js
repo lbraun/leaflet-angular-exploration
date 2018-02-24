@@ -1,6 +1,6 @@
 var app = angular.module("app", ["leaflet-directive"]);
 
-app.controller("IndexController", ["$scope", "$http", function($scope, $http) {
+app.controller("IndexController", ["$scope", "$http", 'leafletData', function($scope, $http, leafletData) {
   angular.extend($scope, {
     center: {
       lat: 39.98685368305097,
@@ -24,12 +24,14 @@ app.controller("IndexController", ["$scope", "$http", function($scope, $http) {
       reverseGeocoding(latlng);
     }
   });
+
   function reverseGeocoding(latlng) {
     var urlString = "http://nominatim.openstreetmap.org/reverse?format=json&lat=" +
       latlng.lat + "&lon=" +
       latlng.lng + "&zoom=18&addressdetails=1";
     $http.get(urlString).then(addMarker, errorMessage);
   }
+
   function addMarker(response) {
     var marker = {
       lat: parseFloat(response.data.lat),
@@ -55,6 +57,7 @@ app.controller("IndexController", ["$scope", "$http", function($scope, $http) {
       }
     }, errorMessage);
   }
+
   function loadTodos(response) {
     if (response.data.length > 0) {
       $scope.markers = response.data;
@@ -65,9 +68,11 @@ app.controller("IndexController", ["$scope", "$http", function($scope, $http) {
       $scope.currentMarker = [];
     }
   }
+
   function postSuccess(response) {
     $http.get(serverUrl).then(loadTodos, errorMessage);
   }
+
   function errorMessage(error) {
     console.log(error);
   }
@@ -93,5 +98,11 @@ app.controller("IndexController", ["$scope", "$http", function($scope, $http) {
       lng: $scope.markers[index].lng,
       zoom: 15
     };
+    var popup = L.popup().setLatLng([$scope.markers[index].lat, $scope.markers[index].lng])
+      .setContent($scope.markers[index].message);
+    leafletData.getMap("map").then(function(map) {
+      popup.openOn(map);
+    });
   }
+
 }]);
