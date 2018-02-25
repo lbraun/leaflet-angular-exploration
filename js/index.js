@@ -80,7 +80,7 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   function errorMessage(error) {
     console.log(error);
   }
-  $scope.info = function(index) {
+  $scope.edit = function(index) {
     var marker = {
       lat: parseFloat($scope.markers[index].lat),
       lng: parseFloat($scope.markers[index].lng),

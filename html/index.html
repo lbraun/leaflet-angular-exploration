@@ -44,10 +44,10 @@
                 <tr ng-repeat="marker in markers">
                   <td>{{marker.title}}</td>
                   <td>{{marker.dueDate | date: "dd/MM/yyyy (hh:mm)"}}</td>
-                  <td>
-                    <button class="btn btn-info" ng-click="info($index)" data-toggle="modal" data-target="#modal">Info</button>
-                    <button class="btn btn-success" ng-click="show($index)">Show</button>
-                    <button class="btn btn-danger" ng-click="remove($index)">Remove</button>
+                  <td class="text-right">
+                    <button class="btn btn-sm btn-info" ng-click="edit($index)" data-toggle="modal" data-target="#modal">Edit</button>
+                    <button class="btn btn-sm btn-success" ng-click="show($index)">Show</button>
+                    <button class="btn btn-sm btn-danger" ng-click="remove($index)">Remove</button>
                   </td>
                 </tr>
               </tbody>
@@ -60,7 +60,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 class="modal-title" id="modalLabel">Info</h2>
+              <h2 class="modal-title" id="modalLabel">Edit your task here.</h2>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
 
