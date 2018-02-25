@@ -98,7 +98,7 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
       address: $scope.markers[index].address
     };
     $scope.currentMarker = marker;
-    $("#modal").on('click', '#btnClose', function() {
+    $("#modal").on('click', '#btnSave', function() {
       $http.put(serverUrl + $scope.markers[index]._id, marker).then(postSuccess, errorMessage);
     })
   }
