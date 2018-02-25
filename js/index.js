@@ -74,7 +74,6 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   }
 
   function postSuccess(response) {
-    $scope.counter = response.data.length;
     $http.get(serverUrl).then(loadTodos, errorMessage);
   }
 
