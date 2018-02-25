@@ -52,8 +52,8 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   $scope.remove = function(index) {
     var id = $scope.markers[index]._id;
     $http.delete(serverUrl + id).then(function() {
-      $scope.counter--;
       if ($scope.markers.length == 1) {
+        $scope.counter = 0;
         window.location.reload();
       } else {
         $http.get(serverUrl).then(loadTodos, errorMessage);
@@ -62,6 +62,7 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   }
 
   function loadTodos(response) {
+    $scope.counter = response.data.length;
     if (response.data.length > 0) {
       $scope.markers = response.data;
       $($scope.markers).each(function(index, marker) {
@@ -73,7 +74,6 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   }
 
   function postSuccess(response) {
-    $scope.counter++;
     $http.get(serverUrl).then(loadTodos, errorMessage);
   }
 
