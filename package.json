@@ -13,7 +13,7 @@
   "author": "Lucas Braun",
   "license": "MIT",
   "dependencies": {
-    "angular": "^1.6.9",
+    "angular": "^1.6.8",
     "angular-leaflet-directive": "^0.10.0",
     "bootstrap": "^4.0.0",
     "cors": "^2.8.4",

@@ -66,8 +66,8 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
       var dateString;
       $scope.markers = response.data;
       $($scope.markers).each(function(index, marker) {
-        dateString= new Date(marker.dueDate).toGMTString();
-        $scope.markers[index].message = "<b>Title: </b>" + marker.title + "<br/><b>Due Date: </b>" + dateString.substring(0, dateString.length - 4);
+      dateString= new Date(marker.dueDate).toGMTString().substring(0, dateString.length - 4);
+      $scope.markers[index].message = "<b>Title: </b>" + marker.title + "<br/><b>Due Date: </b>" + dateString;
       });
     } else {
       $scope.currentMarker = [];
