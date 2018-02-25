@@ -44,9 +44,15 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
 
     $scope.currentMarker = marker;
     $("#modal").modal('show');
-    $("#modal").on('click', '#btnClose', function() {
+    $("#modal").on('click', '#btnCancel', function() {
+     marker = new Object();
+    })
+    $("#modal").on('click', '#btnSave', function() {
       $http.post(serverUrl, marker).then(postSuccess, errorMessage);
       marker = {};
+    })
+    $('#modal').on('hidden.bs.modal', function () {
+      marker = new Object();
     })
   }
   $scope.remove = function(index) {
