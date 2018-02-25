@@ -13,14 +13,14 @@
   "author": "Lucas Braun",
   "license": "MIT",
   "dependencies": {
-    "angular": "^1.6.8",
+    "angular": "^1.6.9",
     "angular-leaflet-directive": "^0.10.0",
     "bootstrap": "^4.0.0",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "jquery": "^3.3.1",
-    "mongoose": "^5.0.6",
     "leaflet": "^0.7.2",
+    "mongoose": "^5.0.6",
     "popper.js": "^1.12.9"
   }
 }
