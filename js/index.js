@@ -104,7 +104,7 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
     };
     var popup = L.popup().setLatLng([$scope.markers[index].lat, $scope.markers[index].lng])
       .setContent($scope.markers[index].message);
-    leafletData.getMap("map").then(function(map) {
+    leafletData.getMap("leafletDirectiveMap").then(function(map) {
       popup.openOn(map);
     });
   }
