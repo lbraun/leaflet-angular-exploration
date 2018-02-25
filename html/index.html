@@ -24,7 +24,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6">
-            <leaflet tiles="tiles" lf-center="center" markers="markers" height="480px" width="100%"></leaflet>
+            <leaflet tiles="tiles" id = "map" lf-center="center" markers="markers" height="480px" width="100%"></leaflet>
           </div>
 
           <div class="col-md-6">
@@ -43,7 +43,7 @@
               </thead>
               <tbody>
                 <tr ng-repeat="marker in markers">
-                  <td>{{marker.message}}</td>
+                  <td>{{marker.title}}</td>
                   <td>{{marker.dueDate | date: "dd/MM/yyyy (hh:mm)"}}</td>
                   <td>
                     <button class="btn btn-info" ng-click="info($index)" data-toggle="modal" data-target="#modal">Info</button>
@@ -68,7 +68,7 @@
             <div class="modal-body">
               <div class="form-group">
                 <label for="title">Title</label>
-                <input type="text" class="form-control" ng-model="currentMarker.message" id="title" placeholder="Enter title">
+                <input type="text" class="form-control" ng-model="currentMarker.title" id="title" placeholder="Enter title">
               </div>
 
               <div class="form-group">
@@ -85,7 +85,7 @@
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+              <button type="button" id="btnClose" class="btn btn-info" data-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
