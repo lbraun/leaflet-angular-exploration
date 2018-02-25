@@ -36,7 +36,11 @@
                   <th>Due date</th>
                   <th></th>
                   <th></th>
-                  <th></th>
+                  <th class="text-right">
+                    <span class="badge badge-secondary">
+                      {{counter == 1 ? counter + " task" : counter + " tasks"}}
+                    </span>
+                  </th>
                 </tr>
               </thead>
               <tbody>

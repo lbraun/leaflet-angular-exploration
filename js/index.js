@@ -16,6 +16,7 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   })
   var serverUrl = "http://localhost:3000/todo/";
   $scope.markers = new Array();
+  $scope.counter = 0;
   $http.get(serverUrl).then(loadTodos, errorMessage); //Get tasks
   $scope.$on("leafletDirectiveMap.mousedown", function(event, args) {
     var mouseButton = args.leafletEvent.originalEvent.button;
@@ -40,6 +41,7 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
       dueDate: new Date(),
       address: response.data.display_name
     };
+
     $scope.currentMarker = marker;
     $("#modal").modal('show');
     $("#modal").on('click', '#btnClose', function() {
@@ -50,6 +52,7 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   $scope.remove = function(index) {
     var id = $scope.markers[index]._id;
     $http.delete(serverUrl + id).then(function() {
+      $scope.counter--;
       if ($scope.markers.length == 1) {
         window.location.reload();
       } else {
@@ -70,6 +73,7 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   }
 
   function postSuccess(response) {
+    $scope.counter++;
     $http.get(serverUrl).then(loadTodos, errorMessage);
   }
 
@@ -104,5 +108,4 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
       popup.openOn(map);
     });
   }
-
 }]);
