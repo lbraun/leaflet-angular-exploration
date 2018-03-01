@@ -14,10 +14,37 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
       }
     }
   })
+  var icons = {
+    default_marker: {},
+    pink_marker: {
+      iconUrl: '../icons/pink_marker.PNG',
+      iconSize: [45, 45], // size of the icon
+    },
+    blue_marker: {
+      iconUrl: '../icons/blue_marker.png',
+      iconSize: [45, 45], // size of the icon
+    },
+    red_marker: {
+      iconUrl: '../icons/red_marker.png',
+      iconSize: [45, 45], // size of the icon
+    }
+  }
   var serverUrl = "http://localhost:3000/todo/";
   $scope.markers = new Array();
   $scope.counter = 0;
   $http.get(serverUrl).then(loadTodos, errorMessage); //Get tasks
+
+  $scope.$on("leafletDirectiveMarker.dragend", function(event, args) {
+    var marker = {
+      lat: parseFloat(args.model.lat),
+      lng: parseFloat(args.model.lng),
+      title: args.model.title,
+      dueDate: new Date(args.model.dueDate),
+      address: args.model.address
+    };
+    $scope.currentMarker = marker;
+    $http.put(serverUrl + args.model._id, marker).then(postSuccess, errorMessage);
+  });
   $scope.$on("leafletDirectiveMap.mousedown", function(event, args) {
     var mouseButton = args.leafletEvent.originalEvent.button;
     if (mouseButton == 2) { // Right button
@@ -73,9 +100,11 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
       $scope.markers = response.data;
       var dateString;
       $($scope.markers).each(function(index, marker) {
-        dateString= new Date(marker.dueDate).toGMTString()
+        dateString = new Date(marker.dueDate).toGMTString()
         dateString = dateString.substring(0, dateString.length - 4);
         $scope.markers[index].message = "<b>Title: </b>" + marker.title + "<br/><b>Due Date: </b>" + dateString;
+        $scope.markers[index].draggable = true;
+        $scope.markers[index].icon = icons.blue_marker;
       });
     } else {
       $scope.currentMarker = [];
