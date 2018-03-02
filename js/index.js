@@ -34,21 +34,20 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
     var mouseButton = args.leafletEvent.originalEvent.button;
     if (mouseButton == 2) { // Right button
       var latlng = args.leafletEvent.latlng;
-      reverseGeocoding(latlng,0);
+      reverseGeocoding(latlng, null);
     }
   });
-  function reverseGeocoding(latlng,id) {
+  function reverseGeocoding(latlng, id) {
     var urlString = "http://nominatim.openstreetmap.org/reverse?format=json&lat=" +
       latlng.lat + "&lon=" +
       latlng.lng + "&zoom=18&addressdetails=1";
-      if(id === 0){
-        $http.get(urlString).then(addMarker, errorMessage);
-      }
-      else{
+      if(id){
         $http.get(urlString).then(function(response){
           $scope.currentMarker.address = response.data.display_name;
           $http.put(serverUrl + id, $scope.currentMarker).then(postSuccess, errorMessage);
         }, errorMessage);
+      } else {
+        $http.get(urlString).then(addMarker, errorMessage);
       }
   }
 
@@ -95,7 +94,7 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
         dateString = new Date(marker.dueDate).toGMTString()
         dateString = dateString.substring(0, dateString.length - 4);
         $scope.markers[index].message = "<b>Title: </b>" + marker.title + "<br/><b>Due Date: </b>" + dateString;
-        if(new Date(marker.dueDate) > new Date()){
+        if(new Date(marker.dueDate) >= new Date()){
           $scope.markers[index].icon = icons.upcoming_marker;
           $scope.markers[index].draggable = true;
         }
@@ -128,6 +127,7 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
       $http.put(serverUrl + $scope.markers[index]._id, marker).then(postSuccess, errorMessage);
     })
   }
+  // Listen for drag event on marker to update task
   $scope.$on("leafletDirectiveMarker.dragend", function(event, args) {
     var marker = {
       lat: parseFloat(args.model.lat),
@@ -142,7 +142,7 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   });
   $scope.show = function(index) {
     $.each($scope.markers, function(i, marker) {
-      marker.focus = i == index;
+      marker.focus = (i == index);
     });
     $scope.center = {
       lat: $scope.markers[index].lat,
