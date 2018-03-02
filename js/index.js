@@ -30,30 +30,25 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   $scope.counter = 0;
   $http.get(serverUrl).then(loadTodos, errorMessage); //Get tasks
 
-  $scope.$on("leafletDirectiveMarker.dragend", function(event, args) {
-    var marker = {
-      lat: parseFloat(args.model.lat),
-      lng: parseFloat(args.model.lng),
-      title: args.model.title,
-      dueDate: new Date(args.model.dueDate),
-      address: args.model.address
-    };
-    $scope.currentMarker = marker;
-    $http.put(serverUrl + args.model._id, marker).then(postSuccess, errorMessage);
-  });
   $scope.$on("leafletDirectiveMap.mousedown", function(event, args) {
     var mouseButton = args.leafletEvent.originalEvent.button;
     if (mouseButton == 2) { // Right button
       var latlng = args.leafletEvent.latlng;
-      reverseGeocoding(latlng);
+      reverseGeocoding(latlng, null);
     }
   });
-
-  function reverseGeocoding(latlng) {
+  function reverseGeocoding(latlng, id) {
     var urlString = "http://nominatim.openstreetmap.org/reverse?format=json&lat=" +
       latlng.lat + "&lon=" +
       latlng.lng + "&zoom=18&addressdetails=1";
-    $http.get(urlString).then(addMarker, errorMessage);
+      if(id){
+        $http.get(urlString).then(function(response){
+          $scope.currentMarker.address = response.data.display_name;
+          $http.put(serverUrl + id, $scope.currentMarker).then(postSuccess, errorMessage);
+        }, errorMessage);
+      } else {
+        $http.get(urlString).then(addMarker, errorMessage);
+      }
   }
 
   function addMarker(response) {
@@ -99,11 +94,10 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
         dateString = new Date(marker.dueDate).toGMTString()
         dateString = dateString.substring(0, dateString.length - 4);
         $scope.markers[index].message = "<b>Title: </b>" + marker.title + "<br/><b>Due Date: </b>" + dateString;
-        if(new Date(marker.dueDate) > new Date()){
+        if (new Date(marker.dueDate) >= new Date()) {
           $scope.markers[index].icon = marker_icons.upcoming_marker;
           $scope.markers[index].draggable = true;
-        }
-        else{
+        } else {
           $scope.markers[index].icon = marker_icons.expired_marker;
           $scope.markers[index].message += " <i>(expired)</i>";
         }
@@ -133,9 +127,22 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
       $http.put(serverUrl + $scope.markers[index]._id, marker).then(postSuccess, errorMessage);
     })
   }
+  // Listen for drag event on marker to update task
+  $scope.$on("leafletDirectiveMarker.dragend", function(event, args) {
+    var marker = {
+      lat: parseFloat(args.model.lat),
+      lng: parseFloat(args.model.lng),
+      title: args.model.title,
+      dueDate: new Date(args.model.dueDate),
+      address: args.model.address
+    };
+    $scope.currentMarker = marker;
+    var latlng = L.latLng(parseFloat(args.model.lat),parseFloat(args.model.lng));
+    reverseGeocoding(latlng,args.model._id);
+  });
   $scope.show = function(index) {
     $.each($scope.markers, function(i, marker) {
-      marker.focus = i == index;
+      marker.focus = (i == index);
     });
     $scope.center = {
       lat: $scope.markers[index].lat,
