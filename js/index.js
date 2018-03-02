@@ -14,10 +14,10 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
       }
     }
   })
-  var icons = {
+  var marker_icons = {
     default_marker: {},
     expired_marker: {
-      iconUrl: '../icons/red_marker.png',
+      iconUrl: '../icons/gray_marker.png',
       iconSize: [45, 45], // size of the icon
     },
     upcoming_marker: {
@@ -94,12 +94,12 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
         dateString = new Date(marker.dueDate).toGMTString()
         dateString = dateString.substring(0, dateString.length - 4);
         $scope.markers[index].message = "<b>Title: </b>" + marker.title + "<br/><b>Due Date: </b>" + dateString;
-        if(new Date(marker.dueDate) >= new Date()){
-          $scope.markers[index].icon = icons.upcoming_marker;
+        if (new Date(marker.dueDate) >= new Date()) {
+          $scope.markers[index].icon = marker_icons.upcoming_marker;
           $scope.markers[index].draggable = true;
-        }
-        else{
-          $scope.markers[index].icon = icons.expired_marker;
+        } else {
+          $scope.markers[index].icon = marker_icons.expired_marker;
+          $scope.markers[index].message += " <i>(expired)</i>";
         }
       });
     } else {
