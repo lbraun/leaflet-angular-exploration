@@ -37,6 +37,22 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
       reverseGeocoding(latlng, null);
     }
   });
+
+  var marker;
+
+  $("#modal").on('click', '#btnAdd', function() {
+    $http.post(serverUrl, marker).then(postSuccess, errorMessage);
+  })
+  $("#modal").on('click', '#btnEdit', function() {
+    $http.put(serverUrl + $scope.currentMarker.id, marker).then(postSuccess, errorMessage);
+  })
+  $("#modal").on('click', '#btnCancel', function() {
+    marker = {};
+  })
+  $('#modal').on('hidden.bs.modal', function() {
+    marker = {};
+  })
+
   function reverseGeocoding(latlng, id) {
     var urlString = "http://nominatim.openstreetmap.org/reverse?format=json&lat=" +
       latlng.lat + "&lon=" +
@@ -52,7 +68,7 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   }
 
   function addMarker(response) {
-    var marker = {
+    marker = {
       lat: parseFloat(response.data.lat),
       lng: parseFloat(response.data.lon),
       title: "New entry",
@@ -61,17 +77,9 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
     };
 
     $scope.currentMarker = marker;
+    $("#btnEdit").addClass("d-none")
+    $("#btnAdd").removeClass("d-none")
     $("#modal").modal('show');
-    $("#modal").on('click', '#btnCancel', function() {
-      marker = {};
-    })
-    $("#modal").on('click', '#btnSave', function() {
-      $http.post(serverUrl, marker).then(postSuccess, errorMessage);
-      marker = {};
-    })
-    $('#modal').on('hidden.bs.modal', function() {
-      marker = {};
-    })
   }
   $scope.remove = function(index) {
     var id = $scope.markers[index]._id;
@@ -115,7 +123,8 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
     console.log(error);
   }
   $scope.edit = function(index) {
-    var marker = {
+    marker = {
+      id: $scope.markers[index]._id,
       lat: parseFloat($scope.markers[index].lat),
       lng: parseFloat($scope.markers[index].lng),
       title: $scope.markers[index].title,
@@ -123,13 +132,12 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
       address: $scope.markers[index].address
     };
     $scope.currentMarker = marker;
-    $("#modal").on('click', '#btnSave', function() {
-      $http.put(serverUrl + $scope.markers[index]._id, marker).then(postSuccess, errorMessage);
-    })
+    $("#btnAdd").addClass("d-none")
+    $("#btnEdit").removeClass("d-none")
   }
   // Listen for drag event on marker to update task
   $scope.$on("leafletDirectiveMarker.dragend", function(event, args) {
-    var marker = {
+    marker = {
       lat: parseFloat(args.model.lat),
       lng: parseFloat(args.model.lng),
       title: args.model.title,
