@@ -16,16 +16,12 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   })
   var icons = {
     default_marker: {},
-    pink_marker: {
-      iconUrl: '../icons/pink_marker.PNG',
-      iconSize: [45, 45], // size of the icon
-    },
-    blue_marker: {
-      iconUrl: '../icons/blue_marker.png',
-      iconSize: [45, 45], // size of the icon
-    },
-    red_marker: {
+    expired_marker: {
       iconUrl: '../icons/red_marker.png',
+      iconSize: [45, 45], // size of the icon
+    },
+    upcoming_marker: {
+      iconUrl: '../icons/blue_marker.png',
       iconSize: [45, 45], // size of the icon
     }
   }
@@ -104,7 +100,12 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
         dateString = dateString.substring(0, dateString.length - 4);
         $scope.markers[index].message = "<b>Title: </b>" + marker.title + "<br/><b>Due Date: </b>" + dateString;
         $scope.markers[index].draggable = true;
-        $scope.markers[index].icon = icons.blue_marker;
+        if(new Date(marker.dueDate) > new Date()){
+          $scope.markers[index].icon = icons.upcoming_marker;
+        }
+        else{
+          $scope.markers[index].icon = icons.expired_marker;
+        }
       });
     } else {
       $scope.currentMarker = [];
