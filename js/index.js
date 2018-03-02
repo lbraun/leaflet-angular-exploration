@@ -99,9 +99,9 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
         dateString = new Date(marker.dueDate).toGMTString()
         dateString = dateString.substring(0, dateString.length - 4);
         $scope.markers[index].message = "<b>Title: </b>" + marker.title + "<br/><b>Due Date: </b>" + dateString;
-        $scope.markers[index].draggable = true;
         if(new Date(marker.dueDate) > new Date()){
           $scope.markers[index].icon = icons.upcoming_marker;
+          $scope.markers[index].draggable = true;
         }
         else{
           $scope.markers[index].icon = icons.expired_marker;
