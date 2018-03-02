@@ -28,6 +28,7 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   var serverUrl = "http://localhost:3000/todo/";
   $scope.markers = new Array();
   $scope.counter = 0;
+  var marker;
   $http.get(serverUrl).then(loadTodos, errorMessage); //Get tasks
 
   $scope.$on("leafletDirectiveMap.mousedown", function(event, args) {
@@ -37,8 +38,6 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
       reverseGeocoding(latlng, null);
     }
   });
-
-  var marker;
 
   $("#modal").on('click', '#btnAdd', function() {
     $http.post(serverUrl, marker).then(postSuccess, errorMessage);
@@ -53,14 +52,14 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
     marker = {};
   })
 
-  function reverseGeocoding(latlng, id) {
+  function reverseGeocoding(latlng, marker) {
     var urlString = "http://nominatim.openstreetmap.org/reverse?format=json&lat=" +
       latlng.lat + "&lon=" +
       latlng.lng + "&zoom=18&addressdetails=1";
-      if(id){
+      if(marker){
         $http.get(urlString).then(function(response){
-          $scope.currentMarker.address = response.data.display_name;
-          $http.put(serverUrl + id, $scope.currentMarker).then(postSuccess, errorMessage);
+          marker.address = response.data.display_name;
+          $http.put(serverUrl + marker.id, marker).then(postSuccess, errorMessage);
         }, errorMessage);
       } else {
         $http.get(urlString).then(addMarker, errorMessage);
@@ -132,21 +131,28 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
       address: $scope.markers[index].address
     };
     $scope.currentMarker = marker;
-    $("#btnAdd").addClass("d-none")
-    $("#btnEdit").removeClass("d-none")
+    $("#btnAdd").addClass("d-none");
+    $("#btnEdit").removeClass("d-none");
   }
+
   // Listen for drag event on marker to update task
   $scope.$on("leafletDirectiveMarker.dragend", function(event, args) {
+    var index;
+    $.each($scope.markers, function(i,marker) {
+      if(marker._id == args.model._id) {
+        index = i; 
+      }
+    });
     marker = {
+      id : $scope.markers[index]._id,
       lat: parseFloat(args.model.lat),
       lng: parseFloat(args.model.lng),
-      title: args.model.title,
-      dueDate: new Date(args.model.dueDate),
-      address: args.model.address
+      title: $scope.markers[index].title,
+      dueDate: new Date($scope.markers[index].dueDate),
+      address: $scope.markers[index].address
     };
-    $scope.currentMarker = marker;
     var latlng = L.latLng(parseFloat(args.model.lat),parseFloat(args.model.lng));
-    reverseGeocoding(latlng,args.model._id);
+    reverseGeocoding(latlng,marker);
   });
   $scope.show = function(index) {
     $.each($scope.markers, function(i, marker) {
