@@ -137,13 +137,8 @@ app.controller("IndexController", ["$scope", "$http", 'leafletData', function($s
   }
   // Listen for drag event on marker to update task
   $scope.$on("leafletDirectiveMarker.dragend", function(event, args) {
-    marker = {
-      lat: parseFloat(args.model.lat),
-      lng: parseFloat(args.model.lng),
-      title: args.model.title,
-      dueDate: new Date(args.model.dueDate),
-      address: args.model.address
-    };
+    marker.lat = parseFloat(args.model.lat);
+    marker.lng = parseFloat(args.model.lng);
     $scope.currentMarker = marker;
     var latlng = L.latLng(parseFloat(args.model.lat),parseFloat(args.model.lng));
     reverseGeocoding(latlng,args.model._id);
